@@ -18,7 +18,7 @@ try {
 }
 
 
-const userRouter= require("./routes/user.route.js");
+const userRouter= require("./src/routes/user.route.js");
 app.use('/user',userRouter)
 
 
