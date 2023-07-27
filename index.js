@@ -22,6 +22,6 @@ const userRouter= require("./src/routes/user.route.js");
 app.use('/user',userRouter)
 
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT,  ()=> {
     console.log(`Started application on port ${process.env.PORT}`);
 });
