@@ -18,8 +18,8 @@ try {
 }
 
 
-const userRouter= require("./src/routes/user.route.js");
-app.use('/user',userRouter)
+const userRouter= require("./src/routes/auth.route.js");
+app.use('/',userRouter)
 
 
 app.listen(process.env.PORT,  ()=> {
