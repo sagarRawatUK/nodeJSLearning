@@ -7,16 +7,14 @@ const User = require('../model/auth.model.js')
 
 const register = async (req, res) => {
     try {
-        const { email, password, username,mobileNo } = req.body;
-        const isUserExist = await User.count({$or:[
-            {email},
-            {mobileNo}
-        ]});
+        const { email, password, username, mobileNo } = req.body;
+        const isUserExist = await User.findOne({email});
         if(isUserExist){
             throw new Error('Email or Phone already exist')
         }
-
-        const user =  new User({ email, password: hashedPassword, username });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const user =  new User({ email, password:hashedPassword, username });
         await user.save()
         res.status(200).json({ message: "User Registered Successfully",username:username,email:email});
     }
