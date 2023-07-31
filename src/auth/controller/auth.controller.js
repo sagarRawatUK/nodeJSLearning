@@ -37,7 +37,24 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Invalid password" });
         }
         const token = jwt.sign({ userId: user._id }, process.env.JWTSECRETKEY, { expiresIn: "1d" });
-        res.json({ token });
+        res.status(200).json({ token });
+    }
+    catch (error) {
+        console.log(`/login error ${error}`);
+        console.log(error)
+        res.status(500).json({ message: "Failed to login" });
+    }
+};
+
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: "This email is not registered with us" });
+        }
+        res.status(200).json({ message: "Password reset link sent successfully"});
+        
     }
     catch (error) {
         console.log(`/login error ${error}`);
@@ -48,7 +65,6 @@ const login = async (req, res) => {
 
 
 module.exports = {
-
     login,
-    register
+    register,forgotPassword,
 }
