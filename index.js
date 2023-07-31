@@ -17,9 +17,11 @@ try {
    console.log("Error: " + error);
 }
 
+const authRoute = require('./src/auth/routes/auth.route.js')
+const userRoute = require("./src/user/routes/user.route.js")
 
-const userRouter= require("./src/routes/auth.route.js");
-app.use('/',userRouter)
+app.use("/auth", authRoute);
+app.use("/user", userRoute);
 
 
 app.listen(process.env.PORT,  ()=> {

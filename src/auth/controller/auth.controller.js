@@ -2,21 +2,28 @@ const router = require('express').Router()
 require("dotenv").config();
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
-const User = require('./auth.schema')
+const User = require('../model/auth.model.js')
 
 
 const register = async (req, res) => {
     try {
-        const { email, password, username } = req.body;
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        const user = await User.create({ email, password: hashedPassword, username });
+        const { email, password, username,mobileNo } = req.body;
+        const isUserExist = await User.count({$or:[
+            {email},
+            {mobileNo}
+        ]});
+        if(isUserExist){
+            throw new Error('Email or Phone already exist')
+        }
+
+        const user =  new User({ email, password: hashedPassword, username });
+        await user.save()
         res.status(200).json({ message: "User Registered Successfully",username:username,email:email});
     }
     catch (error) {
         console.log(`/register error ${error}`);
         console.log(error)
-        res.status(500).json({ message: "Failed to register user" });
+        res.status(500).json({ message:error.message});
     }
 };
 
@@ -42,5 +49,8 @@ const login = async (req, res) => {
 };
 
 
-module.exports = login;
-module.exports = register;
+module.exports = {
+
+    login,
+    register
+}
