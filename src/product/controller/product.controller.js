@@ -1,5 +1,7 @@
 const Product = require('../model/product.model.js')
 
+const axios = require("axios").create({baseUrl: "https://jsonplaceholder.typicode.com/"});
+
 exports.addProduct = async (req, res, next) => {
     const { product_name, price } = req.body
     try {
@@ -31,3 +33,20 @@ exports.addProduct = async (req, res, next) => {
         });
     }
 }
+
+exports.getProducts = async (req,res,next)=>{
+    try {
+        if(req.user._id == null){
+            return res.status(400).json({
+                message: "User doesn't Exist",
+            });
+        }
+		const response = await axios({
+			url: "users",
+			method: "get",
+		});
+		res.status(200).json(response.data);
+	} catch (err) {
+		res.status(500).json({ message: err });
+	}
+} 
