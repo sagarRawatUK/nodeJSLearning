@@ -19,9 +19,12 @@ try {
 
 const authRoute = require('./src/auth/routes/auth.route.js')
 const userRoute = require("./src/user/routes/user.route.js")
+const productRoute = require("./src/product/routes/product.routes.js")
 
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
+app.use("/product", productRoute);
+
 
 
 app.listen(process.env.PORT,  ()=> {
